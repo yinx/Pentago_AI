@@ -3,7 +3,7 @@ import java.util.Scanner;
 /**
  * Created by Tom on 24/09/2015.
  */
-public class Run {
+public class ConsoleRun {
     private static Scanner input = new Scanner(System.in);
     private Board board;
     private TokenType currentPlayer;
@@ -11,7 +11,7 @@ public class Run {
     private int lastSetRow;
     private int lastSetCol;
 
-    public Run() {
+    public ConsoleRun() {
         board = new Board(6, 6);
 
         initGame();
@@ -93,6 +93,6 @@ public class Run {
     }
 
     public static void main(String[] args) {
-        new Run();
+        new ConsoleRun();
     }
 }
