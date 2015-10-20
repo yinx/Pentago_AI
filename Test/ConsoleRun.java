@@ -86,9 +86,16 @@ public class ConsoleRun {
             }
         } while (!validInput);
         board.paint();
-        if (board.check4Win(lastSetRow,lastSetCol)) {
-            if (currentPlayer == TokenType.WHITE) gameState = GameState.WHITE_WON;
-            else if (currentPlayer == TokenType.BLACK) gameState = GameState.BLACK_WON;
+        switch (board.checkEveryCell4Win()) {
+            case BLACK:
+                gameState = GameState.BLACK_WON;
+                break;
+            case WHITE:
+                gameState = GameState.WHITE_WON;
+                break;
+            case Empty:
+                gameState = GameState.PLAYING;
+                break;
         }
     }
 

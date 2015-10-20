@@ -7,7 +7,7 @@ public class Board {
     private int rows;
     private int columns;
     private TokenType[][] cells;
-    private static final int AMOUNT_OF_TOKENS=2;
+    private static final int AMOUNT_OF_TOKENS = 2;
 
     public Board(int rows, int columns) {
         this.rows = rows;
@@ -19,7 +19,6 @@ public class Board {
             }
         }
     }
-
 
 
     public void paint() {
@@ -58,6 +57,30 @@ public class Board {
 
     public void setShiveType(int row, int col, TokenType tokenType) {
         cells[row][col] = tokenType;
+    }
+
+    public TokenType checkEveryCell4Win() {
+        TokenType tokenType = TokenType.Empty;
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                if (!cells[row][col].equals(TokenType.Empty)) {
+                    if (check4Win(row, col)) {
+                        if (cells[row][col].getColour().equals(TokenType.BLACK.getColour())) {
+                            tokenType = TokenType.BLACK;
+                        } else{
+                            tokenType = TokenType.WHITE;
+                        }
+
+                    } else {
+                        tokenType = TokenType.Empty;
+                    }
+                }
+            }
+        }
+
+
+        return tokenType;
     }
 
     public boolean check4Win(int row, int col) {
@@ -136,21 +159,21 @@ public class Board {
             case 2:
                 for (int row = 0; row < 3; row++) {
                     for (int col = 3; col < 6; col++) {
-                        chosenBoard[row][col-3] = cells[row][col];
+                        chosenBoard[row][col - 3] = cells[row][col];
                     }
                 }
                 break;
             case 3:
                 for (int row = 3; row < 6; row++) {
                     for (int col = 0; col < 3; col++) {
-                        chosenBoard[row-3][col] = cells[row][col];
+                        chosenBoard[row - 3][col] = cells[row][col];
                     }
                 }
                 break;
             case 4:
                 for (int row = 3; row < 6; row++) {
                     for (int col = 3; col < 6; col++) {
-                        chosenBoard[row-3][col-3] = cells[row][col];
+                        chosenBoard[row - 3][col - 3] = cells[row][col];
                     }
                 }
                 break;
@@ -170,21 +193,21 @@ public class Board {
             case 2:
                 for (int row = 0; row < 3; row++) {
                     for (int col = 3; col < 6; col++) {
-                        cells[row][col] = transposedPart[row][col-3];
+                        cells[row][col] = transposedPart[row][col - 3];
                     }
                 }
                 break;
             case 3:
                 for (int row = 3; row < 6; row++) {
                     for (int col = 0; col < 3; col++) {
-                        cells[row][col] = transposedPart[row-3][col];
+                        cells[row][col] = transposedPart[row - 3][col];
                     }
                 }
                 break;
             case 4:
                 for (int row = 3; row < 6; row++) {
                     for (int col = 3; col < 6; col++) {
-                        cells[row][col] = transposedPart[row-3][col-3];
+                        cells[row][col] = transposedPart[row - 3][col - 3];
                     }
                 }
                 break;
@@ -254,7 +277,7 @@ public class Board {
             adjacentSameTokens++;
             i++;
         }
-        while (row - i < rows && getPlayerOfTokenAt(row - i, col).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
+        while (row - i > 0 && getPlayerOfTokenAt(row - i, col).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
             adjacentSameTokens++;
             i++;
         }
