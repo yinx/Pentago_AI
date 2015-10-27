@@ -5,17 +5,17 @@ import java.util.Scanner;
  */
 public class ConsoleRun {
     private static Scanner input = new Scanner(System.in);
-    private Board board;
+    private BoardController boardController;
     private TokenType currentPlayer;
     private GameState gameState;
     private int lastSetRow;
     private int lastSetCol;
 
     public ConsoleRun() {
-        board = new Board(6, 6);
+        boardController = new BoardController(6,6);
 
         initGame();
-        board.paint();
+        boardController.paintBoard();
         do {
             doPlayerMove(currentPlayer);
 
@@ -38,28 +38,6 @@ public class ConsoleRun {
 
     public void doPlayerMove(TokenType currentPlayer) {
         boolean validInput = false;
-        int keuze;
-        do {
-            System.out.print("\nWelk deel van het bord wil je draaien? (1-4)");
-            keuze = input.nextInt();
-            if (keuze > 0 && keuze < 5) {
-                System.out.print("In welke richting wilt u het bord draaien? (l of r)");
-                input = new Scanner(System.in);
-                String richting = input.nextLine();
-                switch (richting.charAt(0)) {
-                    case 'l':
-                        board.turnBoard(keuze, false);
-                        break;
-                    case 'r':
-                        board.turnBoard(keuze, true);
-                        break;
-                }
-            } else {
-                System.out.println("Verkeerde keuze");
-            }
-        } while (keuze <= 0 && keuze >= 5);
-        board.paint();
-
         do {
             if (currentPlayer == TokenType.BLACK) {
                 System.out.print("Black player, enter your move (column 1-6) (row 1-6) (vb 3,5): ");
@@ -69,10 +47,10 @@ public class ConsoleRun {
             String in = input.nextLine();
             int selectedCol = Integer.parseInt(in.split(",")[0]) - 1;
             int selectedRow = Integer.parseInt(in.split(",")[1]) - 1;
-            if (selectedCol >= 0 && selectedCol < board.getColumns() && selectedRow >= 0 && selectedRow < board.getColumns()) {
+            if (selectedCol >= 0 && selectedCol < boardController.getColumns() && selectedRow >= 0 && selectedRow < boardController.getColumns()) {
 
-                if (board.getShiveType(selectedRow, selectedCol) == TokenType.Empty) {
-                    board.setShiveType(selectedRow, selectedCol, currentPlayer);
+                if (boardController.getShiveType(selectedRow, selectedCol) == TokenType.Empty) {
+                    boardController.setShiveType(selectedRow, selectedCol, currentPlayer);
                     validInput = true;
                     lastSetCol = selectedCol;
                     lastSetRow = selectedRow;
@@ -85,8 +63,32 @@ public class ConsoleRun {
                 System.out.println("This move is invalid");
             }
         } while (!validInput);
-        board.paint();
-        switch (board.checkEveryCell4Win()) {
+
+        boardController.paintBoard();
+        int keuze;
+        do {
+            System.out.print("\nWelk deel van het bord wil je draaien? (1-4)");
+            keuze = input.nextInt();
+            if (keuze > 0 && keuze < 5) {
+                System.out.print("In welke richting wilt u het bord draaien? (l of r)");
+                input = new Scanner(System.in);
+                String richting = input.nextLine();
+                switch (richting.charAt(0)) {
+                    case 'l':
+                        boardController.turnBoard(keuze, false);
+                        break;
+                    case 'r':
+                        boardController.turnBoard(keuze, true);
+                        break;
+                }
+            } else {
+                System.out.println("Verkeerde keuze");
+            }
+        } while (keuze <= 0 && keuze >= 5);
+        boardController.paintBoard();
+
+
+        switch (boardController.checkEveryCell4Win()) {
             case BLACK:
                 gameState = GameState.BLACK_WON;
                 break;

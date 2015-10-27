@@ -7,7 +7,6 @@ public class Board {
     private int rows;
     private int columns;
     private TokenType[][] cells;
-    private static final int AMOUNT_OF_TOKENS = 2;
 
     public Board(int rows, int columns) {
         this.rows = rows;
@@ -59,36 +58,7 @@ public class Board {
         cells[row][col] = tokenType;
     }
 
-    public TokenType checkEveryCell4Win() {
-        TokenType tokenType = TokenType.Empty;
 
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                if (!cells[row][col].equals(TokenType.Empty)) {
-                    if (check4Win(row, col)) {
-                        if (cells[row][col].getColour().equals(TokenType.BLACK.getColour())) {
-                            tokenType = TokenType.BLACK;
-                        } else{
-                            tokenType = TokenType.WHITE;
-                        }
-
-                    } else {
-                        tokenType = TokenType.Empty;
-                    }
-                }
-            }
-        }
-
-
-        return tokenType;
-    }
-
-    public boolean check4Win(int row, int col) {
-        return (checkVertically(row, col, AMOUNT_OF_TOKENS) || checkHorizontally(row, col, AMOUNT_OF_TOKENS)
-                || checkDiagonally1(row, col, AMOUNT_OF_TOKENS)
-                || checkDiagonally2(row, col, AMOUNT_OF_TOKENS));
-
-    }
 
     //boolean direction:
     //if true rotate clockwise
@@ -223,66 +193,7 @@ public class Board {
     }
 
     //for checking nrOfTokens (win situation: nrOfTokens = 5)
-    private boolean checkDiagonally1(int row, int col, int nrOfTokens) {
-        for (int j = 0; j < nrOfTokens; j++) {
-            int adjacentSameTokens = 0;
-            for (int i = 0; i < nrOfTokens; i++) {
-                if ((col + i - j) >= 0 && (col + i - j) < columns
-                        && (row + i - j) >= 0 && (row + i - j) < rows
-                        && getPlayerOfTokenAt(row + i - j, col + i - j).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-                    adjacentSameTokens++;
-                }
-            }
-            if (adjacentSameTokens >= nrOfTokens)
-                return true;
-        }
-        return false;
-    }
 
-    private boolean checkDiagonally2(int row, int col, int nrOfTokens) {
-        for (int j = 0; j < nrOfTokens; j++) {
-            int adjacentSameTokens = 0;
-            for (int i = 0; i < nrOfTokens; i++) {
-                if ((col - i + j) >= 0 && (col - i + j) < columns
-                        && (row + i - j) >= 0 && (row + i - j) < rows
-                        && getPlayerOfTokenAt(row + i - j, col - i + j).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-                    adjacentSameTokens++;
-                }
-            }
-            if (adjacentSameTokens >= nrOfTokens)
-                return true;
-        }
-        return false;
-    }
-
-    private boolean checkHorizontally(int row, int col, int nrOfTokens) {
-        int adjacentSameTokens = 1;
-        int i = 1;
-        while (col - i >= 0 && getPlayerOfTokenAt(row, col - i).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-            adjacentSameTokens++;
-            i++;
-        }
-        i = 1;
-        while (col + i < columns && getPlayerOfTokenAt(row, col + i).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-            adjacentSameTokens++;
-            i++;
-        }
-        return (adjacentSameTokens >= nrOfTokens);
-    }
-
-    private boolean checkVertically(int row, int col, int nrOfTokens) {
-        int adjacentSameTokens = 1;
-        int i = 1;
-        while (row + i < rows && getPlayerOfTokenAt(row + i, col).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-            adjacentSameTokens++;
-            i++;
-        }
-        while (row - i > 0 && getPlayerOfTokenAt(row - i, col).equals(getPlayerOfTokenAt(row, col)) && !getPlayerOfTokenAt(row, col).equals(TokenType.Empty.getColour())) {
-            adjacentSameTokens++;
-            i++;
-        }
-        return (adjacentSameTokens >= nrOfTokens);
-    }
 
 
 }
