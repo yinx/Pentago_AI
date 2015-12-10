@@ -1,21 +1,37 @@
+package Model;
+
+import View.Board;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by tombe on 27/10/2015.
  */
-public class BoardController {
+public class BoardController implements IFileReaderListener {
     private Board board;
+    private List<IBoardListener> boardListeners;
 
     private static final int AMOUNT_OF_TOKENS = 2;
 
     public BoardController(int rows, int cols) {
         board = new Board(rows, cols);
+        boardListeners = new ArrayList<>();
     }
 
     public void paintBoard() {
         board.paint();
     }
 
+    public void addListener(IBoardListener listener) {
+        boardListeners.add(listener);
+    }
+
     public void setShiveType(int row, int col, TokenType shiveType) {
         board.setShiveType(row, col, shiveType);
+        for (IBoardListener listener : boardListeners) {
+            listener.updateBoard();
+        }
     }
 
     public TokenType checkEveryCell4Win() {
@@ -23,11 +39,11 @@ public class BoardController {
 
         for (int row = 0; row < board.getRows(); row++) {
             for (int col = 0; col < board.getColumns(); col++) {
-                if (!board.getShiveType(row,col).equals(TokenType.Empty)) {
+                if (!board.getShiveType(row, col).equals(TokenType.Empty)) {
                     if (check4Win(row, col)) {
-                        if (board.getShiveType(row,col).getColour().equals(TokenType.BLACK.getColour())) {
+                        if (board.getShiveType(row, col).getColour().equals(TokenType.BLACK.getColour())) {
                             tokenType = TokenType.BLACK;
-                        } else{
+                        } else {
                             tokenType = TokenType.WHITE;
                         }
 
@@ -40,6 +56,25 @@ public class BoardController {
 
 
         return tokenType;
+    }
+
+    @Override
+    public void FileReaded(String[] lines) {
+        int row = 0;
+        for (String line : lines) {
+            int col = 0;
+            for (char character : line.toCharArray()) {
+                if (character == 'W') {
+                    setShiveType(row, col, TokenType.WHITE);
+                } else if (character == 'B') {
+                    setShiveType(row, col, TokenType.BLACK);
+                } else {
+                    setShiveType(row, col, TokenType.Empty);
+                }
+                col++;
+            }
+            row++;
+        }
     }
 
     public boolean check4Win(int row, int col) {
@@ -113,6 +148,13 @@ public class BoardController {
 
     public void turnBoard(int chosenPart, boolean direction) {
         board.turnBoard(chosenPart, direction);
+        for (IBoardListener listener : boardListeners) {
+            listener.updateBoard();
+        }
+    }
+
+    public int getRows() {
+        return board.getRows();
     }
 
     public int getColumns() {

@@ -1,3 +1,6 @@
+package View;
+
+import Model.TokenType;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -57,7 +60,6 @@ public class Board {
     public void setShiveType(int row, int col, TokenType tokenType) {
         cells[row][col] = tokenType;
     }
-
 
 
     //boolean direction:
@@ -193,7 +195,6 @@ public class Board {
     }
 
     //for checking nrOfTokens (win situation: nrOfTokens = 5)
-
 
 
 }

@@ -1,3 +1,5 @@
+import Model.BoardController;
+import Model.FileReader;
 import View.GUI;
 
 /**
@@ -5,6 +7,12 @@ import View.GUI;
  */
 public class GuiRun {
     public static void main(String[] args) {
-        new GUI();
+        BoardController boardController = new BoardController(6, 6);
+        FileReader fileReader = new FileReader();
+        GUI gui = new GUI(boardController, fileReader);
+        boardController.addListener(gui);
+        fileReader.addListener(boardController);
+
+
     }
 }

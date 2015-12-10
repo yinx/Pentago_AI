@@ -1,3 +1,7 @@
+import Model.BoardController;
+import Model.GameState;
+import Model.TokenType;
+
 import java.util.Scanner;
 
 /**
@@ -12,7 +16,7 @@ public class ConsoleRun {
     private int lastSetCol;
 
     public ConsoleRun() {
-        boardController = new BoardController(6,6);
+        boardController = new BoardController(6, 6);
 
         initGame();
         boardController.paintBoard();
