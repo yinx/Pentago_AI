@@ -22,6 +22,16 @@ public class Board {
         }
     }
 
+    public Board(Board board) {
+        this.setRows(board.getRows());
+        this.setColumns(board.getColumns());
+        cells = new TokenType[rows][columns];
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 0; col < columns; ++col) {
+                cells[row][col] = board.getShiveType(row,col);
+            }
+        }
+    }
 
     public void paint() {
         for (int row = 0; row < rows; ++row) {
@@ -192,6 +202,20 @@ public class Board {
             return cell.getColour();
         }
         return TokenType.Empty.getColour();
+    }
+
+    public void flipBoard(boolean flip) {
+        TokenType[][] tempCells = new TokenType[][]{};
+        tempCells = cells;
+        if(flip){
+            for(int i = 0;i<cells.length;i++){
+                for(int j = 0;j<cells.length;j++){
+
+                }
+            }
+        }else{
+
+        }
     }
 
     //for checking nrOfTokens (win situation: nrOfTokens = 5)

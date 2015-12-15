@@ -36,18 +36,21 @@ public class GUI extends JFrame implements IBoardListener {
     private JButton btn3Right;
     private JButton btn4Left;
     private JButton btn4Right;
+    private AiPlayer aiPlayer;
+    private int depth = 1;
 
     //false = black || true = white
-    private boolean currentPlayer = false;
+    private boolean currentPlayer = true;
 
-    private boolean turnBoard = false;
+    private boolean buttonClicked = false;
     private boolean labelClicked = false;
 
     private final JFileChooser jfChooser = new JFileChooser();
 
-    public GUI(BoardController boardController, FileReader fileReader) {
+    public GUI(BoardController boardController, FileReader fileReader,AiPlayer aiPlayer) {
         this.boardController = boardController;
         this.fileReader = fileReader;
+        this.aiPlayer = aiPlayer;
         makeComponents();
         makeLayout();
         showFrame();
@@ -68,14 +71,14 @@ public class GUI extends JFrame implements IBoardListener {
         mniSpelRegels = new JMenuItem("SpelRegels");
         mniInfo = new JMenuItem("Info");
 
-        btn1Left = new Button("btn1Left", true, 1);
-        btn1Right = new Button("btn1Right", false, 1);
-        btn2Left = new Button("btn2Left", true, 2);
-        btn2Right = new Button("btn2Right", false, 2);
-        btn3Left = new Button("btn3Left", true, 3);
-        btn3Right = new Button("btn3Right", false, 3);
-        btn4Left = new Button("btn4Left", true, 4);
-        btn4Right = new Button("btn4Right", false, 4);
+        btn1Left = new Button("btn1Left", false, 1);
+        btn1Right = new Button("btn1Right", true, 1);
+        btn2Left = new Button("btn2Left", false, 2);
+        btn2Right = new Button("btn2Right", true, 2);
+        btn3Left = new Button("btn3Left", false, 3);
+        btn3Right = new Button("btn3Right", true, 3);
+        btn4Left = new Button("btn4Left", false, 4);
+        btn4Right = new Button("btn4Right", true, 4);
 
     }
 
@@ -297,14 +300,35 @@ public class GUI extends JFrame implements IBoardListener {
     }
 
     private void onButtonClicked(Button button) {
-        labelClicked = false;
-        if (!currentPlayer) {
+        if(!buttonClicked) {
+            labelClicked = false;
+        /*if (!currentPlayer) {
             currentPlayer = true;
+            boardController.turnBoard(button.getPart(), button.isDirection());
         } else {
             currentPlayer = false;
-        }
+            boardController.turnBoard(button.getPart(), button.isDirection());
+        }*/
 
-        boardController.turnBoard(button.getPart(), button.isDirection());
+            boardController.turnBoard(button.getPart(), button.isDirection());
+
+            BoardState boardState = aiPlayer.minimax(depth, new BoardState(boardController, TokenType.BLACK, null), true);
+            Board result;
+            if (depth == 1) result = boardState.getBoard();
+            else result = ((BoardState) boardState.getParent()).getBoard();
+            boardController.setBoard(result);
+            updateBoard();
+            System.out.println(boardState.getHeuristicValue());
+            TokenType colour = boardController.checkEveryCell4Win();
+            buttonClicked = true;
+            if (!colour.equals(TokenType.Empty)) {
+                int reply = JOptionPane.showConfirmDialog(this, colour + " heeft gewonnen, nog een keer?");
+
+                if (reply == JOptionPane.NO_OPTION) {
+                    System.exit(0);
+                }
+            }
+        }
     }
 
     private void onLabelClicked(int i, int j) {
@@ -312,11 +336,12 @@ public class GUI extends JFrame implements IBoardListener {
             if (!currentPlayer) {
                 boardController.setShiveType(i, j, TokenType.BLACK);
                 labelClicked = true;
+                buttonClicked = false;
 
             } else {
                 boardController.setShiveType(i, j, TokenType.WHITE);
                 labelClicked = true;
-
+                buttonClicked = false;
             }
         }
     }

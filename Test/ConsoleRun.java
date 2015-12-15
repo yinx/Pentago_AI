@@ -1,6 +1,5 @@
-import Model.BoardController;
-import Model.GameState;
-import Model.TokenType;
+import Model.*;
+import View.Board;
 
 import java.util.Scanner;
 
@@ -23,7 +22,13 @@ public class ConsoleRun {
         do {
             doPlayerMove(currentPlayer);
 
-            currentPlayer = (currentPlayer == TokenType.BLACK) ? TokenType.WHITE : TokenType.BLACK;
+            AiPlayer aiBlack = new AiPlayer(TokenType.BLACK);
+            BoardState boardState = aiBlack.minimax(2, new BoardState(boardController, TokenType.BLACK, null), true);
+            boardController.setBoard(((BoardState)boardState.getParent()).getBoard());
+            System.out.println("Black AI plays!");
+            boardController.paintBoard();
+
+            //currentPlayer = (currentPlayer == TokenType.BLACK) ? TokenType.WHITE : TokenType.BLACK;
 
         } while (gameState == GameState.PLAYING);
         if (gameState == GameState.BLACK_WON) {
@@ -36,7 +41,7 @@ public class ConsoleRun {
     }
 
     public void initGame() {
-        currentPlayer = TokenType.BLACK;
+        currentPlayer = TokenType.WHITE;
         gameState = GameState.PLAYING;
     }
 

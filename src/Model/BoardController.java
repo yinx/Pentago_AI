@@ -12,7 +12,11 @@ public class BoardController implements IFileReaderListener {
     private Board board;
     private List<IBoardListener> boardListeners;
 
-    private static final int AMOUNT_OF_TOKENS = 2;
+    private static final int AMOUNT_OF_TOKENS = 5;
+
+    public Board getBoard() {
+        return board;
+    }
 
     public BoardController(int rows, int cols) {
         board = new Board(rows, cols);
@@ -53,7 +57,6 @@ public class BoardController implements IFileReaderListener {
                 }
             }
         }
-
 
         return tokenType;
     }
@@ -163,5 +166,9 @@ public class BoardController implements IFileReaderListener {
 
     public TokenType getShiveType(int selectedRow, int selectedCol) {
         return board.getShiveType(selectedRow, selectedCol);
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }
