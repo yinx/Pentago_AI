@@ -8,53 +8,60 @@ import java.util.ArrayList;
 public class AiPlayer {
 
     private TokenType colour;
-    private int depth = 2;
 
     public AiPlayer(TokenType colour) {
         this.colour = colour;
     }
 
-    public TokenType getColour() {
-        return colour;
-    }
 
     public BoardState minimax(int depth, BoardState boardState, Boolean max){
+        boardState.removeFromParent();
         if(max){
             boardState.setHeuristicValue(Double.NEGATIVE_INFINITY);
             if(depth!=0){
                 ArrayList children;
                 children = generateChildren(boardState,colour);
                 boardState.add((BoardState) children.remove(0));
+
                 while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.POSITIVE_INFINITY) {
-                    BoardState HBoard = minimax(depth - 1, (BoardState) boardState.getNextNode(), false);
-                    if (HBoard.getHeuristicValue() >= boardState.getHeuristicValue()) {
-                        boardState.setHeuristicBoard(HBoard);
-                        boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                    BoardState newBoard = (BoardState)boardState.getNextNode();
+                    if(newBoard.calculateBoardValue(colour)!=Double.POSITIVE_INFINITY) {
+                        BoardState HBoard = minimax(depth - 1, newBoard, false);
+                        if (HBoard.getHeuristicValue() > boardState.getHeuristicValue()) {
+                            boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                        }
+                        boardState.add((BoardState) children.remove(0));
+                    }else{
+                        boardState.setHeuristicValue(Double.POSITIVE_INFINITY);
                     }
-                    boardState.add((BoardState) children.remove(0));
                 }
             }else{
-                boardState.calculateBoardValue(colour);
+                Double value = boardState.calculateBoardValue(colour);
+                boardState.setHeuristicValue(value);
                 boardState.setHeuristicBoard(boardState);
             }
         }else{
             boardState.setHeuristicValue(Double.POSITIVE_INFINITY);
             if(depth!=0){
                 ArrayList children;
-                children = generateChildren(boardState,colour==TokenType.BLACK?TokenType.WHITE:colour);
-
+                children = generateChildren(boardState,colour==TokenType.BLACK?TokenType.WHITE:TokenType.BLACK);
                 boardState.add((BoardState) children.remove(0));
 
                 while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.NEGATIVE_INFINITY) {
-                    BoardState HBoard = minimax(depth - 1, (BoardState) boardState.getNextNode(), true);
-                    if (HBoard.getHeuristicValue() <= boardState.getHeuristicValue()) {
-                        boardState.setHeuristicBoard(HBoard);
-                        boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                    BoardState newBoard = (BoardState)boardState.getNextNode();
+                    if(newBoard.calculateBoardValue(colour)!=Double.NEGATIVE_INFINITY) {
+                        BoardState HBoard = minimax(depth - 1, newBoard, true);
+                        if (HBoard.getHeuristicValue() < boardState.getHeuristicValue()) {
+                            boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                        }
+                        boardState.add((BoardState) children.remove(0));
+                    }else{
+                        boardState.setHeuristicValue(Double.NEGATIVE_INFINITY);
                     }
-                    boardState.add((BoardState) children.remove(0));
                 }
             }else{
-                boardState.calculateBoardValue(colour == TokenType.WHITE ? TokenType.BLACK : TokenType.WHITE);
+                Double value =  boardState.calculateBoardValue(colour);
+                boardState.setHeuristicValue(value);
                 boardState.setHeuristicBoard(boardState);
             }
         }
@@ -95,13 +102,6 @@ public class AiPlayer {
             }
         }
         return children;
-    }
-
-    //flips the board along vertical axis(true) or horizontal axis(false)
-    private BoardState flipBoard(BoardState boardState,boolean flip){
-        BoardState flippedBoard = new BoardState(boardState);
-        flippedBoard.flipBoard(flip);
-        return flippedBoard;
     }
 
 }

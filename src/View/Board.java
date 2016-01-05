@@ -204,21 +204,23 @@ public class Board {
         return TokenType.Empty.getColour();
     }
 
-    public void flipBoard(boolean flip) {
-        TokenType[][] tempCells = new TokenType[][]{};
-        tempCells = cells;
-        if(flip){
-            for(int i = 0;i<cells.length;i++){
-                for(int j = 0;j<cells.length;j++){
-
-                }
-            }
-        }else{
-
-        }
-    }
 
     //for checking nrOfTokens (win situation: nrOfTokens = 5)
 
 
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+            for (int row = 0; row < rows; ++row) {
+                for (int col = 0; col < columns; ++col) {
+                    if(cells[row][col].getColour().equals(TokenType.Empty.getColour()))sb.append("_");
+                    sb.append(cells[row][col].getColour());
+                }
+                if (row < rows - 1) {
+                    sb.append("\n");
+                }
+            }
+        return sb.toString();
+    }
 }

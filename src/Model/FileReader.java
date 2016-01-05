@@ -35,10 +35,6 @@ public class FileReader {
                 counter++;
             }
 
-            for (String s : lines) {
-                System.out.println(s);
-            }
-
             for (IFileReaderListener listener : listeners) {
                 listener.FileReaded(lines);
             }

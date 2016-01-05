@@ -221,6 +221,7 @@ public class GUI extends JFrame implements IBoardListener {
         mniOpenFromFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                jfChooser.setCurrentDirectory(new File("./files"));
                 int returnVal = jfChooser.showOpenDialog(GUI.this);
 
                 if (returnVal == jfChooser.APPROVE_OPTION) {
@@ -312,14 +313,24 @@ public class GUI extends JFrame implements IBoardListener {
 
             boardController.turnBoard(button.getPart(), button.isDirection());
 
+            TokenType colour = boardController.checkEveryCell4Win(boardController.getBoard());
+            buttonClicked = true;
+            if (!colour.equals(TokenType.Empty)) {
+                int reply = JOptionPane.showConfirmDialog(this, colour + " heeft gewonnen, nog een keer?");
+
+                if (reply == JOptionPane.NO_OPTION) {
+                    System.exit(0);
+                }
+            }
+
             BoardState boardState = aiPlayer.minimax(depth, new BoardState(boardController, TokenType.BLACK, null), true);
             Board result;
-            if (depth == 1) result = boardState.getBoard();
-            else result = ((BoardState) boardState.getParent()).getBoard();
+            result = ((BoardState)boardState.getFirstChild()).getBoard();
             boardController.setBoard(result);
-            updateBoard();
             System.out.println(boardState.getHeuristicValue());
-            TokenType colour = boardController.checkEveryCell4Win();
+            updateBoard();
+
+            colour = boardController.checkEveryCell4Win(boardController.getBoard());
             buttonClicked = true;
             if (!colour.equals(TokenType.Empty)) {
                 int reply = JOptionPane.showConfirmDialog(this, colour + " heeft gewonnen, nog een keer?");

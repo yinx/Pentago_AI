@@ -38,7 +38,7 @@ public class BoardController implements IFileReaderListener {
         }
     }
 
-    public TokenType checkEveryCell4Win() {
+    public TokenType checkEveryCell4Win(Board board) {
         TokenType tokenType = TokenType.Empty;
 
         for (int row = 0; row < board.getRows(); row++) {
@@ -46,9 +46,9 @@ public class BoardController implements IFileReaderListener {
                 if (!board.getShiveType(row, col).equals(TokenType.Empty)) {
                     if (check4Win(row, col)) {
                         if (board.getShiveType(row, col).getColour().equals(TokenType.BLACK.getColour())) {
-                            tokenType = TokenType.BLACK;
+                            return TokenType.BLACK;
                         } else {
-                            tokenType = TokenType.WHITE;
+                            return TokenType.WHITE;
                         }
 
                     } else {
@@ -171,4 +171,5 @@ public class BoardController implements IFileReaderListener {
     public void setBoard(Board board) {
         this.board = board;
     }
+
 }

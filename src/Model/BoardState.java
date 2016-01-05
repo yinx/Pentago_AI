@@ -16,7 +16,8 @@ public class BoardState extends DefaultMutableTreeNode{
 
     public BoardState(BoardController controller,TokenType player,BoardState heuristic) {
         this.board= controller.getBoard();
-        this.heuristic = heuristic;
+        if(heuristic==null)this.heuristic = this;
+        else this.heuristic=heuristic;
         this.controller = controller;
     }
 
@@ -50,12 +51,7 @@ public class BoardState extends DefaultMutableTreeNode{
         this.heuristicValue = heuristicValue;
     }
 
-    public void calculateBoardValue(TokenType player) {
-        if(controller.checkEveryCell4Win()==player){
-            heuristicValue = Double.POSITIVE_INFINITY;
-        }else if(controller.checkEveryCell4Win()!=TokenType.Empty){
-            heuristicValue = Double.NEGATIVE_INFINITY;
-        }
+    public double calculateBoardValue(TokenType player) {
         double value = 0.0;
         ArrayList<String> lines = new ArrayList<>();
         for(int i = 0;i<6;i++) {
@@ -78,29 +74,30 @@ public class BoardState extends DefaultMutableTreeNode{
                     line.append(board.getPlayerOfTokenAt(j,i));
                 }
             }
+            //TODO check duplicate lines
             lines.add(line.toString());
         }
 
         lines.add(getDiagonal1(0,0).toString());
         lines.add(getDiagonal1(1,0).toString());
         lines.add(getDiagonal1(0,1).toString());
-        lines.add(getDiagonal2(0, 4).toString());
-        lines.add(getDiagonal2(0, 5).toString());
-        lines.add(getDiagonal2(1, 5).toString());
+        lines.add(getDiagonal2(4, 0).toString());
+        lines.add(getDiagonal2(5, 0).toString());
+        lines.add(getDiagonal2(5, 1).toString());
 
         for (String line : lines) {
             value += calculateLineValue(player,line.toLowerCase());
         }
-        heuristicValue = value;
+        return value;
     }
 
-    private StringBuilder getDiagonal1(int col,int row){
+    private StringBuilder getDiagonal1(int row,int col){
         StringBuilder diagonalLines = new StringBuilder();
         do {
-            if (board.getPlayerOfTokenAt(col, row).equals(" ")) {
+            if (board.getPlayerOfTokenAt(row, col).equals(" ")) {
                 diagonalLines.append('_');
             } else {
-                diagonalLines.append(board.getPlayerOfTokenAt(col, row));
+                diagonalLines.append(board.getPlayerOfTokenAt(row, col));
             }
             col++;
             row++;
@@ -108,13 +105,13 @@ public class BoardState extends DefaultMutableTreeNode{
         return diagonalLines;
     }
 
-    private StringBuilder getDiagonal2(int col, int row){
+    private StringBuilder getDiagonal2(int row, int col){
         StringBuilder diagonalLines = new StringBuilder();
         do{
-            if (board.getPlayerOfTokenAt(col, row).equals(" ")) {
+            if (board.getPlayerOfTokenAt(row, col).equals(" ")) {
                 diagonalLines.append('_');
             } else {
-                diagonalLines.append(board.getPlayerOfTokenAt(col, row));
+                diagonalLines.append(board.getPlayerOfTokenAt(row, col));
             }
             col++;
             row--;
@@ -201,6 +198,10 @@ public class BoardState extends DefaultMutableTreeNode{
             if(player==TokenType.BLACK) {
                 value += 50;
             }else value-=50;
+        }else if(line.matches(".*(bbbbb).*")){
+            if(player==TokenType.BLACK) {
+                return Double.POSITIVE_INFINITY;
+            }else return Double.NEGATIVE_INFINITY;
         }else if(line.matches("(ww____|____ww)")){
             if(player==TokenType.WHITE) {
                 value += 5;
@@ -265,6 +266,10 @@ public class BoardState extends DefaultMutableTreeNode{
             if(player==TokenType.WHITE) {
                 value += 50;
             }else value-=50;
+        }else if(line.matches(".*(wwwww).*")) {
+            if (player == TokenType.WHITE) {
+                return Double.NEGATIVE_INFINITY;
+            } else return Double.POSITIVE_INFINITY;
         }
         return value;
     }
@@ -277,8 +282,9 @@ public class BoardState extends DefaultMutableTreeNode{
         return false;
     }
 
-    public void flipBoard(boolean flip) {
-        board.flipBoard(flip);
+    @Override
+    public String toString() {
+        return board.toString()+" HValue = "+heuristicValue;
     }
 }
 

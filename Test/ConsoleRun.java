@@ -97,7 +97,7 @@ public class ConsoleRun {
         boardController.paintBoard();
 
 
-        switch (boardController.checkEveryCell4Win()) {
+        switch (boardController.checkEveryCell4Win(boardController.getBoard())) {
             case BLACK:
                 gameState = GameState.BLACK_WON;
                 break;
