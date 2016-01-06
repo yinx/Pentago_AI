@@ -13,6 +13,8 @@ public class BoardState extends DefaultMutableTreeNode{
     private BoardState heuristic;
     private double heuristicValue;
     private BoardController controller;
+    private double beta = Double.POSITIVE_INFINITY;
+    private double alpha = Double.NEGATIVE_INFINITY;
 
     public BoardState(BoardController controller,TokenType player,BoardState heuristic) {
         this.board= controller.getBoard();
@@ -56,29 +58,23 @@ public class BoardState extends DefaultMutableTreeNode{
         ArrayList<String> lines = new ArrayList<>();
         for(int i = 0;i<6;i++) {
             StringBuilder line = new StringBuilder();
+            StringBuilder line2 = new StringBuilder();
             for(int j = 0;j<6;j++) {
                 if(board.getPlayerOfTokenAt(i,j).equals(" ")){
                     line.append('_');
                 }else{
                     line.append(board.getPlayerOfTokenAt(i,j));
                 }
-            }
-            lines.add(line.toString());
-        }
-        for(int i = 0;i<6;i++) {
-            StringBuilder line = new StringBuilder();
-            for(int j = 0;j<6;j++) {
                 if(board.getPlayerOfTokenAt(j,i).equals(" ")){
-                    line.append('_');
+                    line2.append('_');
                 }else{
-                    line.append(board.getPlayerOfTokenAt(j,i));
+                    line2.append(board.getPlayerOfTokenAt(j,i));
                 }
             }
-            //TODO check duplicate lines
-            lines.add(line.toString());
+            if (!lines.contains(line.toString())) lines.add(line.toString());
+            if (!lines.contains(line2.toString())) lines.add(line2.toString());
         }
 
-        lines.add(getDiagonal1(0,0).toString());
         lines.add(getDiagonal1(1,0).toString());
         lines.add(getDiagonal1(0,1).toString());
         lines.add(getDiagonal2(4, 0).toString());
@@ -182,10 +178,12 @@ public class BoardState extends DefaultMutableTreeNode{
             if(player==TokenType.BLACK) {
                 value += 7;
             }else value-=7;
-        }else if(line.matches("(w_bb__|__bb_w)")){
+        }else if(line.matches(".*(wb)*.")){
+            value -= 1;
+        }else if(line.matches(".*(b).*")){
             if(player==TokenType.BLACK) {
-                value += 7;
-            }else value-=7;
+                value += 1;
+            }else value-=1;
         }else if(line.matches(".*(bb).*")){
             if(player==TokenType.BLACK) {
                 value += 5;
@@ -254,6 +252,10 @@ public class BoardState extends DefaultMutableTreeNode{
             if(player==TokenType.WHITE) {
                 value += 7;
             }else value-=7;
+        }else if(line.matches(".*(w).*")){
+            if(player==TokenType.WHITE) {
+                value += 1;
+            }else value-=1;
         }else if(line.matches(".*(ww).*")){
             if(player==TokenType.WHITE) {
                 value += 5;
@@ -285,6 +287,22 @@ public class BoardState extends DefaultMutableTreeNode{
     @Override
     public String toString() {
         return board.toString()+" HValue = "+heuristicValue;
+    }
+
+    public double getBeta() {
+        return beta;
+    }
+
+    public void setBeta(double beta) {
+        this.beta = beta;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
+    public double getAlpha() {
+        return alpha;
     }
 }
 

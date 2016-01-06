@@ -37,7 +37,7 @@ public class GUI extends JFrame implements IBoardListener {
     private JButton btn4Left;
     private JButton btn4Right;
     private AiPlayer aiPlayer;
-    private int depth = 1;
+    private int depth = 2;
 
     //false = black || true = white
     private boolean currentPlayer = true;
