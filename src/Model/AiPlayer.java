@@ -15,28 +15,26 @@ public class AiPlayer {
 
 
     public BoardState minimax(int depth, BoardState boardState, Boolean max){
-        boardState.removeFromParent();
         if(max){
             boardState.setHeuristicValue(Double.NEGATIVE_INFINITY);
             if(depth!=0){
                 ArrayList children;
                 children = generateChildren(boardState,colour);
-                boardState.add((BoardState) children.remove(0));
 
-                while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.POSITIVE_INFINITY) {
-                    BoardState newBoard = (BoardState)boardState.getNextNode();
+                while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.POSITIVE_INFINITY&&!(boardState.getBeta()<=boardState.getAlpha())) {
+                    boardState.add((BoardState) children.remove(0));
+                    BoardState newBoard = (BoardState)boardState.getChildAt(boardState.getChildCount()-1);
+
                     if(newBoard.calculateBoardValue(colour)!=Double.POSITIVE_INFINITY) {
                         newBoard.setBeta(boardState.getBeta());
                         newBoard.setAlpha(boardState.getAlpha());
                         BoardState HBoard = minimax(depth - 1, newBoard, false);
                         if (HBoard.getHeuristicValue() > boardState.getHeuristicValue()) {
                             boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                            boardState.setHeuristicBoard(HBoard);
                         }
                         if(HBoard.getHeuristicValue()>  boardState.getAlpha()){
                             boardState.setAlpha(HBoard.getHeuristicValue());
-                        }
-                        if(!(boardState.getBeta()<=boardState.getAlpha())){
-                            boardState.add((BoardState) children.remove(0));
                         }
                     }else{
                         boardState.setHeuristicValue(Double.POSITIVE_INFINITY);
@@ -52,22 +50,21 @@ public class AiPlayer {
             if(depth!=0){
                 ArrayList children;
                 children = generateChildren(boardState,colour==TokenType.BLACK?TokenType.WHITE:TokenType.BLACK);
-                boardState.add((BoardState) children.remove(0));
 
-                while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.NEGATIVE_INFINITY) {
-                    BoardState newBoard = (BoardState)boardState.getNextNode();
+                while(!children.isEmpty()&&boardState.getHeuristicValue()!=Double.NEGATIVE_INFINITY&&!(boardState.getBeta()<=boardState.getAlpha())) {
+                    boardState.add((BoardState) children.remove(0));
+                    BoardState newBoard = (BoardState)boardState.getChildAt(boardState.getChildCount() - 1);
+
                     if(newBoard.calculateBoardValue(colour)!=Double.NEGATIVE_INFINITY) {
                         newBoard.setBeta(boardState.getBeta());
                         newBoard.setAlpha(boardState.getAlpha());
                         BoardState HBoard = minimax(depth - 1, newBoard, true);
                         if (HBoard.getHeuristicValue() < boardState.getHeuristicValue()) {
                             boardState.setHeuristicValue(HBoard.getHeuristicValue());
+                            boardState.setHeuristicBoard(HBoard);
                         }
                         if(HBoard.getHeuristicValue() <  boardState.getBeta()){
                             boardState.setBeta(HBoard.getHeuristicValue());
-                        }
-                        if(!(boardState.getBeta()<=boardState.getAlpha())){
-                            boardState.add((BoardState) children.remove(0));
                         }
                     }else{
                         boardState.setHeuristicValue(Double.NEGATIVE_INFINITY);

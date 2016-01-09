@@ -133,145 +133,253 @@ public class BoardState extends DefaultMutableTreeNode{
         if(line.matches("(bb____|____bb)")){
             if(player==TokenType.BLACK) {
                 value += 5;
-            }else value-=5;
-        }else if(line.matches("(bbb___|___bbb)")){
+            }else{
+                value-=5;
+            }
+        }
+        if(line.matches("(bbb___|___bbb)")){
             if(player==TokenType.BLACK) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches("(bbbb__|__bbbb)")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches("(bbbb__|__bbbb)")){
             if(player==TokenType.BLACK) {
                 value += 45;
-            }else value-=45;
-        }else if(line.matches("(bbbbb_|_bbbbb)")){
+            }else{
+                value-=45;
+            }
+        }
+        if(line.matches("(bbbbb_|_bbbbb)")){
             if(player==TokenType.BLACK) {
                 return Double.POSITIVE_INFINITY;
-            }else return Double.NEGATIVE_INFINITY;
-        }else if(line.matches("(_bbb__|__bbb_)")){
+            }else{
+                return Double.NEGATIVE_INFINITY;
+            }
+        }
+        if(line.matches("(_bbb__|__bbb_)")){
             if(player==TokenType.BLACK) {
                 value += 12;
-            }else value-=12;
-        }else if(line.matches("(wbbb__|__bbbw)")){
+            }else{
+                value-=12;
+            }
+        }
+        if(line.matches("(wbbb__|__bbbw)")){
             if(player==TokenType.BLACK) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches("(w_bbb_|_bbb_w)")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches("(w_bbb_|_bbb_w)")){
             if(player==TokenType.BLACK) {
                 value += 12;
-            }else value-=12;
-        }else if(line.matches("(__bb__)")){
+            }else{
+                value-=12;
+            }
+        }
+        if(line.matches("(__bb__)")){
             if(player==TokenType.BLACK) {
                 value += 8;
-            }else value-=8;
-        }else if(line.matches("(_bbbb_)")){
+            }else{
+                value-=8;
+            }
+        }
+        if(line.matches("(_bbbb_)")){
             if(player==TokenType.BLACK) {
                 value += 50;
-            }else value-=50;
-        }else if(line.matches("(wbbbb_|_bbbbw)")){
+            }else{
+                value-=50;
+            }
+        }
+        if(line.matches("(wbbbb_|_bbbbw)")){
             if(player==TokenType.BLACK) {
                 value += 45;
-            }else value-=45;
-        }else if(line.matches("(_bb___|___bb_)")){
+            }else{
+                value-=45;
+            }
+        }
+        if(line.matches("(_bb___|___bb_)")){
             if(player==TokenType.BLACK) {
                 value += 7;
-            }else value-=7;
-        }else if(line.matches("(w__bb_|_bb__w)")){
+            }else{
+                value-=7;
+            }
+        }
+        if(line.matches("(w__bb_|_bb__w)")){
             if(player==TokenType.BLACK) {
                 value += 7;
-            }else value-=7;
-        }else if(line.matches(".*(wb)*.")){
-            value -= 1;
-        }else if(line.matches(".*(b).*")){
+            }else{
+                value-=7;
+            }
+        }
+        if(line.matches(".*(b).*")){
             if(player==TokenType.BLACK) {
                 value += 1;
-            }else value-=1;
-        }else if(line.matches(".*(bb).*")){
+            }else{
+                value-=1;
+            }
+        }
+        if(line.matches(".*(bb).*")){
             if(player==TokenType.BLACK) {
                 value += 5;
-            }else value-=5;
-        }else if(line.matches(".*(bbb).*")){
+            }else{
+                value-=5;
+            }
+        }
+        if(line.matches(".*(bbb).*")){
             if(player==TokenType.BLACK) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches(".*(bbbb).*")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches(".*(bbbb).*")){
             if(player==TokenType.BLACK) {
                 value += 50;
-            }else value-=50;
-        }else if(line.matches(".*(bbbbb).*")){
+            }else{
+                value-=50;
+            }
+        }
+        if(line.matches(".*(bbbbb).*")){
             if(player==TokenType.BLACK) {
                 return Double.POSITIVE_INFINITY;
-            }else return Double.NEGATIVE_INFINITY;
-        }else if(line.matches("(ww____|____ww)")){
+            }else{
+                return Double.NEGATIVE_INFINITY;
+            }
+        }
+        if(line.matches("(ww____|____ww)")){
             if(player==TokenType.WHITE) {
                 value += 5;
-            }else value-=5;
-        }else if(line.matches("(www___|___www)")){
+            }else{
+                value-=5;
+            }
+        }
+        if(line.matches("(www___|___www)")){
             if(player==TokenType.WHITE) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches("(wwww__|__wwww)")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches("(wwww__|__wwww)")){
             if(player==TokenType.WHITE) {
                 value += 45;
-            }else value-=45;
-        }else if(line.matches("(wwwww_|_wwwww)")){
+            }else{
+                value-=45;
+            }
+        }
+        if(line.matches("(wwwww_|_wwwww)")){
             if(player==TokenType.WHITE) {
                 return Double.NEGATIVE_INFINITY;
-            }else return Double.POSITIVE_INFINITY;
-        }else if(line.matches("(_www__|__www_)")){
+            }else{
+                return Double.POSITIVE_INFINITY;
+            }
+        }
+        if(line.matches("(_www__|__www_)")){
             if(player==TokenType.WHITE) {
                 value += 12;
-            }else value-=12;
-        }else if(line.matches("(bwww__|__wwwb)")){
+            }else{
+                value-=12;
+            }
+        }
+        if(line.matches("(bwww__|__wwwb)")){
             if(player==TokenType.WHITE) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches("(b_www_|_www_b)")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches("(b_www_|_www_b)")){
             if(player==TokenType.WHITE) {
                 value += 12;
-            }else value-=12;
-        }else if(line.matches("(__ww__)")){
+            }else{
+                value-=12;
+            }
+        }
+        if(line.matches("(__ww__)")){
             if(player==TokenType.WHITE) {
                 value += 8;
-            }else value-=8;
-        }else if(line.matches("(_wwww_)")){
+            }else{
+                value-=8;
+            }
+        }
+        if(line.matches("(_wwww_)")){
             if(player==TokenType.WHITE) {
                 value += 50;
-            }else value-=50;
-        }else if(line.matches("(bwwww_|_wwwwb)")){
+            }else{
+                value-=50;
+            }
+        }
+        if(line.matches("(bwwww_|_wwwwb)")){
             if(player==TokenType.WHITE) {
                 value += 45;
-            }else value-=45;
-        }else if(line.matches("(_ww___|___ww_)")){
+            }else{
+                value-=45;
+            }
+        }
+        if(line.matches("(_ww___|___ww_)")){
             if(player==TokenType.WHITE) {
                 value += 7;
-            }else value-=7;
-        }else if(line.matches("(b__ww_|_ww__b)")){
+            }else{
+                value-=7;
+            }
+        }
+        if(line.matches("(b__ww_|_ww__b)")){
             if(player==TokenType.WHITE) {
                 value += 7;
-            }else value-=7;
-        }else if(line.matches("(b_ww__|__ww_b)")){
+            }else{
+                value-=7;
+            }
+        }
+        if(line.matches("(b_ww__|__ww_b)")){
             if(player==TokenType.WHITE) {
                 value += 7;
-            }else value-=7;
-        }else if(line.matches(".*(w).*")){
+            }else{
+                value-=7;
+            }
+        }
+        if(line.matches(".*(w).*")){
             if(player==TokenType.WHITE) {
                 value += 1;
-            }else value-=1;
-        }else if(line.matches(".*(ww).*")){
+            }else{
+                value-=1;
+            }
+        }
+        if(line.matches(".*(ww).*")){
             if(player==TokenType.WHITE) {
                 value += 5;
-            }else value-=5;
-        }else if(line.matches(".*(www).*")){
+            }else{
+                value-=5;
+            }
+        }
+        if(line.matches(".*(www).*")){
             if(player==TokenType.WHITE) {
                 value += 10;
-            }else value-=10;
-        }else if(line.matches(".*(wwww).*")){
+            }else{
+                value-=10;
+            }
+        }
+        if(line.matches(".*(wwww).*")){
             if(player==TokenType.WHITE) {
                 value += 50;
-            }else value-=50;
-        }else if(line.matches(".*(wwwww).*")) {
+            }else{
+                value-=50;
+            }
+        }
+        if(line.matches(".*(wwwww).*")) {
             if (player == TokenType.WHITE) {
                 return Double.NEGATIVE_INFINITY;
-            } else return Double.POSITIVE_INFINITY;
+            } else {
+                return Double.POSITIVE_INFINITY;
+            }
+        }
+        if(line.matches(".*(wb)*.")){
+            value -= 1;
+        }
+        if(line.matches(".*(bw)*.")){
+            value -= 1;
         }
         return value;
     }
@@ -286,7 +394,7 @@ public class BoardState extends DefaultMutableTreeNode{
 
     @Override
     public String toString() {
-        return board.toString()+" HValue = "+heuristicValue;
+        return board.toString()+"\nHValue = "+heuristicValue;
     }
 
     public double getBeta() {

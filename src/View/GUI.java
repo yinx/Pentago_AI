@@ -325,9 +325,8 @@ public class GUI extends JFrame implements IBoardListener {
 
             BoardState boardState = aiPlayer.minimax(depth, new BoardState(boardController, TokenType.BLACK, null), true);
             Board result;
-            result = ((BoardState)boardState.getFirstChild()).getBoard();
+            result = ((BoardState)boardState.getHeuristicBoard().getParent()).getBoard();
             boardController.setBoard(result);
-            System.out.println(boardState.getHeuristicValue());
             updateBoard();
 
             colour = boardController.checkEveryCell4Win(boardController.getBoard());
